@@ -8,7 +8,7 @@
 
 :root{
     --bg-dark: #0d0d0d;
-    --accent: #7c6af7;
+    --accent: #F5B800;
     --text-light: #ffffff;
     --nav-height: 64px;
 }
@@ -40,9 +40,10 @@ body{
     gap: 0.6rem;
 }
 .nav-logo img{
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     object-fit: contain;
+    filter: invert(1);
 }
 
 .nav-logo span{
@@ -60,6 +61,12 @@ body{
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.nav-links a{
+    text-decoration: none;
+    color: var(--text-light);
+    transition: color 0.2s;
 }
 
 .nav-links a:hover,
