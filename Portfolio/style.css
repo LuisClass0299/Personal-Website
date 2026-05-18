@@ -1,0 +1,46 @@
+
+/* base */
+*, *::before, *::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+::root{
+    --bg-dark: #0d0d0d;
+    --accent: #7c6af7;
+    --text-light: #ffffff;
+    --nav-height: 64px;
+}
+
+body{
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* navbar */
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--nav-height);
+    padding: 0 2.5rem;
+    background-color: var(--bg-dark);
+    border-bottom:  1px solid rgba(255,255,255,0.07);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo img{
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-logo span{
+    color: white;
+    margin: 10px;
+    font-size: 16px;
+}
