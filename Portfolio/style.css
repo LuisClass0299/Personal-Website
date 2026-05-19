@@ -74,7 +74,32 @@ body{
 .nav-links a.active{
     color: var(--accent);
 }
-/* Hamburger */
+/* Icons*/
+.nav-icons{
+    display:flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+.nav-icons a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:  36px;
+    height: 36px;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-icons a:hover{
+    background-color: var(--accent);
+    color: var(--text-light);
+ }
+
+ /* Hamburger */
 .hamburger{
     display: none;
     background: none;
@@ -110,31 +135,6 @@ body{
         }
     }
 
-
-/* Icons*/
-.nav-icons{
-    display:flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-.nav-icons a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width:  36px;
-    height: 36px;
-    border: 2px solid var(--accent);
-    border-radius: 8px;
-    color: var(--accent);
-    font-size: 1rem;
-    text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.nav-icons a:hover{
-    background-color: var(--accent);
-    color: var(--text-light);
- }
 
  /* Hero */
  .hero{
