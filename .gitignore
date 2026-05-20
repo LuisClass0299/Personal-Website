@@ -1,0 +1,8 @@
+# Claude / AI context files
+CLAUDE.md
+*.memory.md
+memory/
+
+# OS files
+.DS_Store
+Thumbs.db
