@@ -133,45 +133,121 @@ body{
         .nav-icons{
             display: none;
         }
-    }
+}
 
 
  /* Hero */
- .hero{
+.hero{
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 4rem;
     height: calc(100vh - var(--nav-height));
- }
+}
 
- .hero-text{
+.hero-text{
     max-width: 500px;
     flex: 1;
- }
+}
 
- .hero-text h1{
+.hero-text h1{
     font-size: 3.5rem;
     font-weight: 700;
     color: var(--text-light);
     margin-bottom: 1.5rem;
     line-height: 1.1;
- }
+}
 
- .accent{
+.accent{
     color: var(--accent);
- }
+}
 
- .hero-text p{
+.hero-text p{
     font-size:1.1rem;
     color: #aaaaaa;
     line-height: 1.8;
- }
+}
 
- .hero-image img{
+.hero-image img{
     width: 320px;
     height: 420px;
     object-fit: cover;
     object-position: top;
     border-radius: 12px;
+}
+
+ /* Mobile overlay */
+
+ .mobile-menu{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: var(--bg-dark);
+    z-index: 200;
+    flex-direction: column;
+    padding: 1.5rem 2rem;
  }
+
+ .mobile-menu.open{
+    display: flex;
+ }
+ .mobile-menu-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+ 
+ .close-btn{
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+ }
+
+ .mobile-links{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 2.5rem;
+ }
+
+.mobile-links a{
+    text-decoration: none;
+    color: var(--text-light);
+    font-size: 2rem;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+.mobile-links a:hover{
+    color: var(--accent);
+}
+
+.mobile-icons{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding-bottom: 1rem;
+}
+
+.mobile-icons a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.mobile-icons a:hover{
+    background-color: var(--accent);
+    color: var(--text-light);
+}
