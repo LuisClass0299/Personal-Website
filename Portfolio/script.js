@@ -1,6 +1,11 @@
-const btn = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
+const hamburger = document.querySelector('.hamburger');
+const mobileMenu = document.querySelector('.mobile-menu');
+const closeBtn = document.querySelector('.close-btn');
 
-btn.addEventListener('click', () => {
-    btn.classList.toggle('open');
+hamburger.addEventListener('click', () =>{
+    mobileMenu.classList.add('open');
+})
+
+closeBtn.addEventListener('click', () =>{
+    mobileMenu.classList.remove('open');
 })
