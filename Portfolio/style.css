@@ -252,3 +252,131 @@ body{
     background-color: var(--accent);
     color: var(--text-light);
 }
+/* about page */
+
+.about{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 5rem;
+    padding: 6rem 4rem;
+    min-height: 80vh;
+}
+
+.about-text{
+    flex: 1;
+    max-width: 520px;
+}
+
+.about-text h2{
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.about-bio{
+    font-size: 1.05rem;
+    color: #aaaaaa;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+}
+
+.about-hobbies h3{
+    font-size: 1rem;
+    text-transform:  uppercase;
+    letter-spacing:  0.1em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.hobbies-list{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.hobbies-list li{
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #cccccc;
+    font-size: 1rem;
+}
+
+.hobby-icon{
+    font-size: 1.2rem;
+}
+
+/* About Card */
+.about-card{
+    flex-shrink: 0;
+}
+
+.about-card-inner{
+    background-color: #1a1a1a;
+    border: 1px solid rgba(245,184,0,0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 260px;
+}
+
+.about-avatar img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    border: 3px solid var(--accent)
+}
+
+.about-card-info p{
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding-bottom: 0.5rem;
+}
+
+.info-label{
+    color: #888888;
+}
+
+.info-value{
+    color: var(--text-light);
+}
+
+.resume-btn{
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.resume-btn:hover{
+    background-color: var(--accent);
+    color: var(--bg-dark);
+}
+
+@media(max-width: 760px){
+    .about{
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 2rem;
+        gap: 3rem;
+    }
+
+    .about-card-inner{
+        width: 100%;
+    }
+}
+
