@@ -39,6 +39,7 @@ body{
     align-items: center;
     gap: 0.6rem;
 }
+
 .nav-logo img{
     width: 80px;
     height: 80px;
@@ -80,6 +81,7 @@ body{
     align-items: center;
     gap: 0.6rem;
 }
+
 .nav-icons a{
     display: flex;
     align-items: center;
@@ -284,7 +286,7 @@ body{
 .about-hobbies h3{
     font-size: 1rem;
     text-transform:  uppercase;
-    letter-spacing:  0.1em;
+    letter-spacing:  0.2em;
     color: var(--accent);
     margin-bottom: 1rem;
 }
