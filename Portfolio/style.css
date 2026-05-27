@@ -382,3 +382,15 @@ body{
     }
 }
 
+/*experience */
+.experience{
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    padding: 6rem 4rem;
+}
+
+.experience-entry{
+    display: flex;
+    flex-direction: row;
+}
