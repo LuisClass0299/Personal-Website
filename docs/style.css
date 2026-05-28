@@ -473,6 +473,61 @@ body{
     line-height: 1.7;
 }
 
+/* Experience tech stack*/
+
+.tech-icons{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.tech-stack{
+    max-width: 900px;
+    margin: 0 auto 6rem;
+    padding: 0 2rem;
+}
+
+.teck-stack h2{
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.tech-stack-group{
+    margin-bottom: 2rem;
+}
+
+.tech-stack-group h3{
+    font-size: 0.85rem;
+    color: #aaaaaa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+}
+
+.tech-icon{
+    position: relative;
+}
+
+.tech-icon i{
+    font-size: 2.5rem;
+    transition: transform 0.2s;
+}
+
+.tech-icon:hover i{
+    transform:translateY(-4px)
+}
+
+.tech-tooltip{
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    right: 50%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/*Projects page*/
 .projects{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
