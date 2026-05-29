@@ -488,7 +488,7 @@ body{
     padding: 0 2rem;
 }
 
-.teck-stack h2{
+.tech-stack h2{
     font-size: 2rem;
     margin-bottom: 2rem;
 }
@@ -506,24 +506,36 @@ body{
 }
 
 .tech-icon{
+    display: flex;
     position: relative;
 }
 
+.tech-icon:hover .tech-tooltip{
+    opacity: 1;
+}
+
 .tech-icon i{
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     transition: transform 0.2s;
 }
 
 .tech-icon:hover i{
-    transform:translateY(-4px)
+    transform: translateY(-8px);
 }
 
 .tech-tooltip{
     position: absolute;
     bottom: 100%;
     left: 50%;
-    right: 50%;
+    transform: translateX(-50%);
+    background-color: #1a1a1a;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    margin-bottom: 8px;
     opacity: 0;
+    transition: opacity 0.2s;
     pointer-events: none;
 }
 
