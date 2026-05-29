@@ -141,6 +141,15 @@ body{
         }
 }
 
+.footer-info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    gap: 0.6rem;
+    height: 32px;
+    padding: 0 2.5rem;
+}
 
  /* Hero */
 .hero{
