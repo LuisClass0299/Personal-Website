@@ -426,6 +426,10 @@ body{
     flex-direction: row;
     gap: 3rem;
     position: relative;
+    background-color: #1a1a1a;
+    border: 1px solid rgba(245,184,0,0.2);
+    border-radius: 16px;
+    padding: .75rem;
 }
 
 .experience-date{
