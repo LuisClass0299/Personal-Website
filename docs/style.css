@@ -146,6 +146,7 @@ body{
     align-items: center;
     justify-content: center;
     background-color: #1a1a1a;
+    margin-top: 100px;
     gap: 0.6rem;
     height: 32px;
     padding: 0 2.5rem;
