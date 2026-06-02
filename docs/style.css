@@ -21,7 +21,6 @@ body{
     color: var(--text-light);
     font-family: 'Segoe UI', system-ui, sans-serif;
 }
-
 .accent{
     color: var(--accent);
 }
@@ -116,32 +115,6 @@ body{
     color: var(--text-light);
     font-size: 1.5rem;
     cursor: pointer;
-}
-
-@media (max-width: 760px){
-        .hamburger{
-            display: block;
-        }
-
-        .nav-links{
-            display: none;
-            position: absolute;
-            top: var(--nav-height);
-            left: 0;
-            width: 100%;
-            flex-direction: column;
-            background-color: var(--bg-dark);
-            padding: 1rem 2rem;
-            gap: 1rem;
-        }
-        
-        .nav-links.open{
-            display: flex;
-        }
-
-        .nav-icons{
-            display: none;
-        }
 }
 
 .footer-info{
@@ -402,20 +375,6 @@ body{
     background-color: var(--accent);
     color: var(--bg-dark);
 }
-
-@media(max-width: 760px){
-    .about{
-        flex-direction: column;
-        align-items: center;
-        padding: 4rem 2rem;
-        gap: 3rem;
-    }
-
-    .about-card-inner{
-        width: 100%;
-    }
-}
-
 /*experience */
 .experience{
     display: flex;
@@ -639,4 +598,48 @@ body{
     color: var(--accent);
     text-align: center;
     padding: 1rem;
+}
+
+@media (max-width: 760px){
+        .hamburger{
+            display: block;
+        }
+
+        .nav-links{
+            display: none;
+            position: absolute;
+            top: var(--nav-height);
+            left: 0;
+            width: 100%;
+            flex-direction: column;
+            background-color: var(--bg-dark);
+            padding: 1rem 2rem;
+            gap: 1rem;
+        }
+        
+        .nav-links.open{
+            display: flex;
+        }
+
+        .nav-icons{
+            display: none;
+        }
+
+         .hero{
+            flex-direction: column;
+            min-height: calc(100vh-var(--nav-height));
+            height: auto;
+            justify-content: flex-start; 
+        }
+
+        .about{
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 2rem;
+        gap: 3rem;
+        }
+
+        .about-card-inner{
+        width: 100%;
+        }
 }
