@@ -14,11 +14,13 @@
 }
 
 body{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
     background-color: var(--bg-dark);
     color: var(--text-light);
     font-family: 'Segoe UI', system-ui, sans-serif;
 }
-
 .accent{
     color: var(--accent);
 }
@@ -115,37 +117,12 @@ body{
     cursor: pointer;
 }
 
-@media (max-width: 760px){
-        .hamburger{
-            display: block;
-        }
-
-        .nav-links{
-            display: none;
-            position: absolute;
-            top: var(--nav-height);
-            left: 0;
-            width: 100%;
-            flex-direction: column;
-            background-color: var(--bg-dark);
-            padding: 1rem 2rem;
-            gap: 1rem;
-        }
-        
-        .nav-links.open{
-            display: flex;
-        }
-
-        .nav-icons{
-            display: none;
-        }
-}
-
 .footer-info{
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #1a1a1a;
+    margin-top: auto;
     gap: 0.6rem;
     height: 32px;
     padding: 0 2.5rem;
@@ -398,20 +375,6 @@ body{
     background-color: var(--accent);
     color: var(--bg-dark);
 }
-
-@media(max-width: 760px){
-    .about{
-        flex-direction: column;
-        align-items: center;
-        padding: 4rem 2rem;
-        gap: 3rem;
-    }
-
-    .about-card-inner{
-        width: 100%;
-    }
-}
-
 /*experience */
 .experience{
     display: flex;
@@ -448,6 +411,10 @@ body{
     height: 120px;
     object-fit: contain;
     margin-top: 0.75rem;
+    background-color: #ffffff;
+    border: 2px solid rgb(245,184,0);
+    border-radius: 50%;
+    padding: 0.2rem;
 }
 
 .experience-entry::before{
@@ -635,4 +602,52 @@ body{
     color: var(--accent);
     text-align: center;
     padding: 1rem;
+}
+/* Mobile Display */
+@media (max-width: 760px){
+    .hamburger{
+        display: block;
+    }
+
+    .nav-links{
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background-color: var(--bg-dark);
+        padding: 1rem 2rem;
+        gap: 1rem;
+    }
+    
+    .nav-links.open{
+        display: flex;
+    }
+
+    .nav-icons{
+        display: none;
+    }
+
+    .hero{
+        flex-direction: column;
+        min-height: calc(100vh-var(--nav-height));
+        height: auto;
+        justify-content: flex-start; 
+    }
+    
+    .experience-entry{
+        flex-direction: column;
+    }
+
+    .about{
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 2rem;
+        gap: 3rem;
+    }
+
+    .about-card-inner{
+        width: 100%;
+    }
 }
