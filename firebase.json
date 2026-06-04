@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "luis-portfolio-site-bfebd",
+    "public": "docs",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
