@@ -346,7 +346,6 @@ body{
 .about-card-info p{
     display: flex;
     justify-content: space-between;
-    gap: 6rem;
     font-size: 0.9rem;
     border-bottom: 1px solid rgba(255,255,255,0.07);
     padding-bottom: 0.5rem;
@@ -358,6 +357,9 @@ body{
 
 .info-value{
     color: var(--text-light);
+    min-width: 200px;
+    text-align: right;
+    flex: 1;
 }
 
 .resume-btn{
