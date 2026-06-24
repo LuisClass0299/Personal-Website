@@ -178,13 +178,44 @@ body{
     color: var(--bg-dark);
 }
 
+.hero-image{
+    position: relative;
+}
+
+.sticker{
+    position: absolute;
+    width: 60px;
+    height: auto;
+}
+
+.sticker-github{
+    top: 20px;
+    right: -10px;
+}
+
+.sticker-ucf{
+    bottom: 200px;
+    left: 200px;
+    z-index: -10;
+}
+
 .hero-image img{
     width: 320px;
     height: 420px;
     object-fit: cover;
     object-position: top;
     border-radius: 12px;
+    animation: 2s ease-in-out infinite alternate-reverse cool-animation;
 }
+
+ @keyframes cool-animation{
+        from{
+            transform: translateY(0px);
+        }
+        to{
+            transform: translateY(-15px);
+        }
+    }
 
  /* Mobile overlay */
 
@@ -636,7 +667,7 @@ body{
     .hero{
         margin-top: 1rem;
         flex-direction: column;
-        min-height: calc(100vh-var(--nav-height));
+        min-height: calc(100vh - var(--nav-height));
         height: auto;
         justify-content: flex-start; 
         gap: 2rem;
