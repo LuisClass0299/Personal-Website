@@ -60,12 +60,27 @@
             <figure class="home-photo">
                 <div class="home-photo-frame">
                     <img src="assets/profile.jpeg" alt="Luis Classe standing in front of the city skyline at night" width="320" height="420">
+                    <canvas class="home-decode-canvas" aria-hidden="true"></canvas>
+                    <div class="home-decode-glitch" aria-hidden="true"></div>
                     <span class="home-photo-corner" data-corner="tl" aria-hidden="true"></span>
                     <span class="home-photo-corner" data-corner="tr" aria-hidden="true"></span>
                     <span class="home-photo-corner" data-corner="bl" aria-hidden="true"></span>
                     <span class="home-photo-corner" data-corner="br" aria-hidden="true"></span>
                 </div>
                 <figcaption><span>profile.jpeg</span><span class="t-accent">● online</span></figcaption>
+                <div class="home-decode-term" aria-hidden="true">
+                    <div class="home-decode-bar">
+                        <span class="home-term-dot"></span>
+                        <span class="home-term-dot"></span>
+                        <span class="home-term-dot"></span>
+                        <span class="home-decode-title">luis@ucf: ~/decode</span>
+                    </div>
+                    <div class="home-decode-body">
+                        <p><span class="t-accent">luis@ucf</span><span class="home-term-path">:~$</span> <span class="home-decode-cmd">/decode luis</span><span class="home-decode-caret"></span></p>
+                        <p class="home-decode-out t-accent">01101100 01110101 01101001 01110011</p>
+                        <p class="home-decode-out"><span class="home-decode-ok">[ok]</span> profile.jpeg restored</p>
+                    </div>
+                </div>
             </figure>
         </main>
     </div>
@@ -98,5 +113,6 @@
 
     <script src="terminal.js" defer></script>
     <script src="home.js" defer></script>
+    <script src="decode.js" defer></script>
 </body>
 </html>

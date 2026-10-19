@@ -640,6 +640,166 @@ a:hover {
   pointer-events: none;
 }
 
+/* photo decode: decode.js burns the photo into tiles on the canvas and plays /decode luis.
+   The img stays underneath as the base, so without JS the photo shows as is. */
+.home-decode-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* a sepia copy of the photo, sliced and shaken for .3s as the burn starts and as it sharpens */
+.home-decode-glitch {
+  position: absolute;
+  inset: 0;
+  background: url(assets/profile.jpeg) top / cover;
+  filter: sepia(1) saturate(6) brightness(1.1);
+  mix-blend-mode: screen;
+  clip-path: inset(50% 0 50% 0);
+  pointer-events: none;
+}
+
+.home-photo:is([data-decode="out"], [data-decode="sharp"]) .home-decode-glitch {
+  animation: home-decode-glitch 0.3s steps(1) forwards;
+}
+
+@keyframes home-decode-glitch {
+  0% { clip-path: inset(10% 0 70% 0); transform: translate(-7px, 0); }
+  15% { clip-path: inset(55% 0 20% 0); transform: translate(6px, 0); }
+  30% { clip-path: inset(30% 0 52% 0); transform: translate(-4px, 0); }
+  45% { clip-path: inset(78% 0 6% 0); transform: translate(7px, 0); }
+  60% { clip-path: inset(4% 0 86% 0); transform: translate(-6px, 0); }
+  75% { clip-path: inset(44% 0 36% 0); transform: translate(4px, 0); }
+  100% { clip-path: inset(50% 0 50% 0); transform: none; }
+}
+
+/* hold shows the real img; the other phases are drawn on the canvas */
+.home-photo[data-decode]:not([data-decode="hold"]) img {
+  visibility: hidden;
+}
+
+/* the /decode luis mini terminal: open for gap, in and sharp. Its resting styles are the end
+   state of each animation, so with animations off it still reads correctly. */
+.home-photo {
+  position: relative;
+}
+
+.home-decode-term {
+  display: none;
+  position: absolute;
+  left: -40px;
+  bottom: 76px;
+  z-index: 3;
+  width: 300px;
+  border: 1px solid rgba(245, 184, 0, 0.35);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  animation: home-decode-term-in 0.28s ease-out both;
+}
+
+.home-photo:is([data-decode="gap"], [data-decode="in"], [data-decode="sharp"]) .home-decode-term {
+  display: block;
+}
+
+.home-photo[data-decode="sharp"] .home-decode-term {
+  animation: home-decode-term-out 0.3s ease-in forwards;
+}
+
+.home-decode-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: #171717;
+}
+
+.home-decode-bar .home-term-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.home-decode-title {
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.home-decode-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px 14px;
+  line-height: 1.6;
+}
+
+.home-decode-body p {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.home-decode-cmd {
+  display: inline-block;
+  width: 12ch;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: home-decode-type 0.84s steps(12) 0.4s both;
+}
+
+.home-decode-caret {
+  display: none;
+  width: 10px;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: -3px;
+  background: var(--accent);
+  animation: home-blink 1s steps(1) infinite;
+}
+
+.home-photo[data-decode="gap"] .home-decode-caret {
+  display: inline-block;
+}
+
+.home-decode-out {
+  display: none;
+  animation: home-line 0.35s ease-out 0.1s both;
+}
+
+.home-decode-out:last-child {
+  color: var(--text-soft);
+  animation-delay: 1s;
+}
+
+.home-photo:is([data-decode="in"], [data-decode="sharp"]) .home-decode-out {
+  display: block;
+}
+
+.home-decode-ok {
+  color: #28c840;
+}
+
+/* decode.js pauses the loop while the tab is hidden or the photo is off-screen */
+.home-photo.is-paused * {
+  animation-play-state: paused;
+}
+
+@keyframes home-decode-term-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+}
+
+@keyframes home-decode-term-out {
+  to { opacity: 0; transform: translateY(10px) scale(0.96); }
+}
+
+@keyframes home-decode-type {
+  from { width: 0; }
+}
+
 /* phones */
 @media (max-width: 780px) {
   :root {
@@ -663,6 +823,11 @@ a:hover {
 
   .home-intro h1 {
     font-size: 44px;
+  }
+
+  /* the board's -40px would hang off a phone screen, so the mini terminal sits inside the photo */
+  .home-decode-term {
+    left: 10px;
   }
 }
 

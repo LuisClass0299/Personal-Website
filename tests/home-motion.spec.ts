@@ -154,7 +154,8 @@ test.describe('home binary field', () => {
     const cta = (await page.locator('.home-cta').first().boundingBox())!;
     expect(await hit(cta.x + cta.width / 2, cta.y + cta.height / 2)).toContain('home-cta');
 
-    for (const target of [page.getByRole('link', { name: 'experience.log' }), page.locator('.home-cta').nth(1), page.locator('.home-photo img')]) {
+    // the photo frame, not its img: the decode canvas covers the img and hides it outside the hold
+    for (const target of [page.getByRole('link', { name: 'experience.log' }), page.locator('.home-cta').nth(1), page.locator('.home-photo')]) {
       await target.click({ trial: true });
     }
     await page.getByRole('button', { name: /Jump to/ }).click();
