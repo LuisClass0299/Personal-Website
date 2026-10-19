@@ -80,6 +80,10 @@ The slices run as parallel background agents, one wave at a time. Each agent wor
 - [x] 3 Home, motion
 - [x] 4 Photo decode
 - [x] 5 ⌘K palette
+- [ ] 6 Experience (on hold)
+- [ ] 7 Projects (on hold)
+- [ ] 8 About (on hold)
+- [ ] 9 Cleanup and ship
 
 ## Lessons learned
 
@@ -118,7 +122,3 @@ Read this before starting a slice. Add to it when a slice turns up something the
   - copy the `<dialog class="t-palette">` block from `index.html`, rewriting the relative hrefs for the page's depth (`experience.html`, `../assets/resume.pdf`, …);
   - load `../terminal.css` and `<script src="../terminal.js" defer>`.
 - `terminal.js` reads the palette items from the markup and does nothing on a page without a `.t-palette`.
-- [ ] 6 Experience (on hold)
-- [ ] 7 Projects (on hold)
-- [ ] 8 About (on hold)
-- [ ] 9 Cleanup and ship
