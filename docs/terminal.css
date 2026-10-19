@@ -558,6 +558,88 @@ a:hover {
   color: var(--text-muted);
 }
 
+/* home motion: name scramble, role typer, terminal lines and the binary field (home.js) */
+
+/* the scramble paints over the name, so its text and accessible name stay "Luis" */
+#home-name {
+  position: relative;
+  cursor: default;
+}
+
+#home-name[data-scramble] {
+  -webkit-text-fill-color: transparent;
+}
+
+#home-name[data-scramble]::after {
+  content: attr(data-scramble);
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* the typer shows its text from data-text; the whole role stays in #home-role for screen readers */
+.home-typed {
+  white-space: pre;
+}
+
+.home-typed::before {
+  content: attr(data-text);
+}
+
+.home-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-caret {
+    animation: home-blink 1s steps(1) infinite;
+  }
+
+  /* the terminal prints its lines one after another */
+  .home-term-body > p {
+    animation: home-line 0.35s ease-out 0.2s both;
+  }
+
+  .home-term-body > p:nth-child(2) { animation-delay: 0.55s; }
+  .home-term-body > p:nth-child(3) { animation-delay: 0.9s; }
+  .home-term-body > p:nth-child(4) { animation-delay: 1.25s; }
+  .home-term-body > p:nth-child(5) { animation-delay: 1.6s; }
+  .home-term-body > p:nth-child(6) { animation-delay: 1.95s; }
+
+  .t-stage {
+    cursor: crosshair;
+  }
+}
+
+@keyframes home-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes home-line {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* the binary field fills the stage under the nav and <main> and never takes a click */
+.home-field {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 /* phones */
 @media (max-width: 780px) {
   :root {
