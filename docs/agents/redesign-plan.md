@@ -69,7 +69,9 @@ Each slice is done when: its Playwright tests pass, the page matches its brief a
 
 ## Waves
 
-The slices run as parallel background agents, one wave at a time. Spawn each as the `slice-builder` agent (`.claude/agents/slice-builder.md`, which runs on Sonnet) with `isolation: "worktree"`, and keep the prompt to the slice number, its brief's path, its branch name and its `PORT`. Each agent works in its own git worktree, runs `npm ci` there, and uses its own `PORT`. Worktrees are cut from `main`, so the agent's first step is `git checkout -b slice-N-name dev`. A hook blocks `git reset --hard`, so the agent can't move the worktree's own branch; it stays empty and can be deleted after the merge. Commit messages say only what changed: no `Co-Authored-By` line and no mention of Claude. Agents don't run `/simplify`. The orchestrator merges each branch into `dev` in slice order, runs `/simplify` once on the wave's merged changes, runs the full suite and ticks the box below.
+The slices run as parallel background agents, one wave at a time. Spawn each as the `slice-builder` agent (`.claude/agents/slice-builder.md`, which runs on Sonnet) with `isolation: "worktree"`, and keep the prompt to the slice number, its brief's path, its branch name and its `PORT`. Each agent works in its own git worktree, runs `npm ci` there, and uses its own `PORT`. Worktrees are cut from `main`, so the agent's first step is `git checkout -b slice-N-name dev`. A hook blocks `git reset --hard`, so the agent can't move the worktree's own branch; it stays empty and can be deleted after the merge. Commit messages say only what changed: no `Co-Authored-By` line and no mention of Claude. Agents don't run `/simplify`. The orchestrator merges each branch into `dev` in slice order, runs `/simplify` once on the wave's merged changes, runs the full suite and ticks the box below. Then it removes the wave's worktrees (`git worktree remove -f -f`, since they're locked) and deletes the merged slice branches with `git branch -d`. The empty `worktree-agent-*` branches need `-D`, which the hook blocks, so the user deletes those.
+
+GateGuard: subagents skip its "present facts before your first command" gate for Bash and PowerShell, and its first-edit gate for files. The user-level hook `~/.claude/hooks/gateguard-shell.js` runs the plugin's shell gate in place of its own hooks and turns the routine part off for subagents. The destructive-command gate still applies to subagents, so a brief shouldn't need commands like `rm -rf` or `git reset --hard`.
 
 1. Slice 1.
 2. Slices 2 and 5.
@@ -119,6 +121,12 @@ Read this before starting a slice. Add to it when a slice turns up something the
 - Safari's canvas has no `ctx.filter`. Compute filtered copies (for example the sepia burn) from the pixels once.
 - WebKit can run `defer` scripts before the stylesheets apply, so CSS custom properties read as `""` and layout is unstyled. Code that reads tokens or measures layout waits for `load`.
 - Shared keyframes (`home-blink`, `home-line`) live in slice 3's section. Reuse them instead of adding identical slice-prefixed copies.
+
+**Shared code** (from wave 3's `/simplify` pass):
+
+- `.t-sr` in `terminal.css` is the visually-hidden utility. Use it rather than writing another one.
+- `home.js` and `decode.js` each have their own pause/resume loop (rAF, elapsed clock, `visibilitychange`, `IntersectionObserver`), and both specs define `setHidden`. Two copies were accepted to keep the slices independent. A third effect (slices 6b, 7b) should move the loop to a shared script and the test helpers to `tests/helpers.ts` instead of copying them again.
+- Work that only changes with an effect's cycle or tick (tile delays, lookups) is computed once per cycle, not in the frame loop.
 
 **Tests:**
 
