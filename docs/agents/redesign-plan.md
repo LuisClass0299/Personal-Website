@@ -79,7 +79,7 @@ The slices run as parallel background agents, one wave at a time. Each agent wor
 - [x] 2 Home, static
 - [ ] 3 Home, motion
 - [ ] 4 Photo decode
-- [ ] 5 ⌘K palette
+- [x] 5 ⌘K palette
 - [ ] 6 Experience (on hold)
 - [ ] 7 Projects (on hold)
 - [ ] 8 About (on hold)
