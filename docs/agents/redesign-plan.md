@@ -124,6 +124,7 @@ Read this before starting a slice. Add to it when a slice turns up something the
 
 - Drive timed effects with `page.clock`, and check each phase 50ms either side of its boundary.
 - Under the fake clock every `requestAnimationFrame` costs about 6ms (Chromium) to 16ms (WebKit) whatever the page draws. For long stretches of fake time use `clock.fastForward`, which fires one frame per jump, not `runFor`.
+- A page with several effects runs them all at once. Each effect's spec blocks the other effects' scripts with `page.route(..., r => r.abort())` in a `beforeEach`. Fake-clock specs also get `test.describe.configure({ timeout: 90_000 })`, because `page.route` and other workers make WebKit and Firefox step the clock far slower.
 - Don't point click checks at an element another effect covers (the photo `img` sits under the decode canvas); target its container.
 - `document.fonts.check` passes even when the font never loads. To check a font, look for a loaded face in `document.fonts`.
 - Cover a script failing to load: block it with `page.route(..., r => r.abort())`, and the page should still show its static content.
