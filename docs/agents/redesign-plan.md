@@ -18,7 +18,7 @@ Don't edit `style.css`, `script.js` or anything in `docs/pages/`. Links from the
 
 - Design canvas: https://claude.ai/code/artifact/1b99561f-b3e4-47af-a386-32bf3ed49b1a ("Portfolio Motion Directions").
 - Boards: `project/Terminal.dc.html` (Home), `project/Timeline.dc.html` (Experience), `project/Bento.dc.html` (Projects). There is no About board.
-- Before each slice, re-read the board you are porting (`Artifact` `read` with `path`), since boards can change between sessions.
+- Before each wave, the orchestrator re-reads the board being ported (`Artifact` `read` with `path`), since boards can change between sessions, and writes each slice's brief from it (see "Agent budget"). Agents read their brief, not the board.
 - The `.dc.html` files run on the canvas runtime (`DCLogic`, `<sc-for>`, `<sc-if>`, `{{bindings}}`, `/_blob/` image URLs). Port the markup, styles and behaviour into plain HTML/CSS/vanilla JS. The runtime itself does not come along. Blob images map to files in `docs/assets/` (the profile photo is `profile.jpeg`, and the experience logos are `limbitless.png`, `ieee.png` and `bpa.png`).
 - The inner-page boards still show the old logo-and-links navbar. Those pages get the Home tab-strip nav instead, once they're redesigned.
 
@@ -50,7 +50,7 @@ Don't edit `style.css`, `script.js` or anything in `docs/pages/`. Links from the
 
 ## Slices
 
-Each slice is done when: its Playwright tests pass, the page matches its board at 1280px and 375px widths with no horizontal page scroll, and reduced motion leaves it still and readable.
+Each slice is done when: its Playwright tests pass, the page matches its brief at 1280px and 375px widths with no horizontal page scroll, and reduced motion leaves it still and readable.
 
 0. **Test harness.** Replace `tests/example.spec.ts`, which tests playwright.dev, with smoke tests against `docs/`: a `webServer` in `playwright.config.ts`, and every page loading with no console errors. Fix the existing bug in `index.html`, which references `assets/ucf.png` while the file is `UCF.png`, so the sticker 404s on Firebase.
 1. **Foundations** (home page only). Create `terminal.css` with the tokens and the mono font, and switch `index.html` from `style.css`/`script.js` to `terminal.css`/`terminal.js`. Add the tab-strip nav with the pixel scarab and `aria-current` on `home.sh`, the favicon, and the footer with its social links. Remove the hamburger and mobile menu from `index.html`. The "Jump to ⌘K" button is present but only does something after slice 5.
@@ -58,19 +58,33 @@ Each slice is done when: its Playwright tests pass, the page matches its board a
 3. **Home, motion.** Name scramble, role typer, and the binary field canvas with hover glow, click wave and formations.
 4. **Photo decode effect.**
 5. **⌘K palette** on the home page, in `terminal.js`, opened by the nav button and Ctrl/⌘+K.
-6. **Experience** (on hold). The scroll-drawn timeline, the Details/Less toggles and the tech-stack chips. The content must match the current `experience.html`.
-7. **Projects** (on hold). Filter chips, tilt cards with glare, and the "View on GitHub" overlay.
+6. **Experience** (on hold). The content must match the current `experience.html`. Split in two (see "Agent budget"):
+   - 6a. The page itself and the scroll-drawn timeline.
+   - 6b. The Details/Less toggles and the tech-stack chips.
+7. **Projects** (on hold). Split in two:
+   - 7a. The page itself and the filter chips.
+   - 7b. Tilt cards with glare, and the "View on GitHub" overlay.
 8. **About** (on hold). Built from open decision 1.
 9. **Cleanup and ship.** Delete assets that no page references anymore (scarab_logo.png, Font Awesome and the old CSS/JS stay while the inner pages still use them). Update the CLAUDE.md architecture section. Open the PR `dev` → `main` with ECC's `/pr main` (push and create), writing the body with the `pr` skill's template, and check the preview channel URL that CI comments on the PR. The user approves and merges it.
 
 ## Waves
 
-The slices run as parallel background agents, one wave at a time. Each agent works in its own git worktree, runs `npm ci` there, and uses its own `PORT`. Worktrees are cut from `main`, so the agent's first step is `git checkout -b slice-N-name dev`. A hook blocks `git reset --hard`, so the agent can't move the worktree's own branch; it stays empty and can be deleted after the merge. The agent runs the simplify review inline, not as four sub-agents, to save usage, and then re-runs the full suite, because simplify passes have broken things before. Commit messages say only what changed: no `Co-Authored-By` line and no mention of Claude. The orchestrator merges each branch into `dev` in slice order, runs the full suite and ticks the box below.
+The slices run as parallel background agents, one wave at a time. Spawn each as the `slice-builder` agent (`.claude/agents/slice-builder.md`, which runs on Sonnet) with `isolation: "worktree"`, and keep the prompt to the slice number, its brief's path, its branch name and its `PORT`. Each agent works in its own git worktree, runs `npm ci` there, and uses its own `PORT`. Worktrees are cut from `main`, so the agent's first step is `git checkout -b slice-N-name dev`. A hook blocks `git reset --hard`, so the agent can't move the worktree's own branch; it stays empty and can be deleted after the merge. Commit messages say only what changed: no `Co-Authored-By` line and no mention of Claude. Agents don't run a simplify review. The orchestrator merges each branch into `dev` in slice order, reviews the merged diff, runs the full suite and ticks the box below.
 
 1. Slice 1.
 2. Slices 2 and 5.
 3. Slices 3 and 4.
 4. Slice 9 (in the main checkout on `dev`, not a worktree).
+
+## Agent budget
+
+Each agent should finish well under 120k tokens. Slice 3's agent used about 200k, most of it re-sending its context through long debugging rounds.
+
+- **Brief, not board.** Before the wave, the orchestrator writes `docs/agents/briefs/slice-N.md` with only that slice's part of the board: markup, styles and logic, already free of the canvas runtime, plus the asset mapping and the answer to any open decision. The agent reads its brief, this plan's "Technical approach" and "Lessons learned", and the files it edits. It doesn't read the board or other slices' code.
+- **Small slices.** A slice ports at most two effects. Split a bigger one before its wave, as 6 and 7 are.
+- **Narrow test runs.** While iterating, run only the slice's own spec in Chromium: `PORT=<own port> npx playwright test tests/<spec> --project=chromium`. Run the full suite in all three browsers once, before committing. When something fails in one browser only, rerun just that test in that browser.
+- **Debug budget.** After 3 failed attempts at the same failure, stop. Commit the work in progress on the slice branch with a message starting `WIP:`, and report what fails, what was tried and the likeliest cause. The orchestrator decides the next step.
+- **Short reports.** The final report gives the commit, the files changed, the test result, differences from the brief and merge notes. No account of the process.
 
 ## Progress
 

@@ -26,7 +26,8 @@ export default defineConfig({
   /* Locally, the default (half the cores) makes Firefox time out closing contexts on this machine */
   workers: process.env.CI ? 1 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  /* Locally, print failures as they happen and never block on the report server */
+  reporter: process.env.CI ? 'html' : [['line'], ['html', { open: 'never' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
