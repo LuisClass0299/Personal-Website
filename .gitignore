@@ -3,6 +3,16 @@ CLAUDE.md
 *.memory.md
 memory/
 
+# Dependencies
+node_modules/
+
 # OS files
 .DS_Store
 Thumbs.db
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

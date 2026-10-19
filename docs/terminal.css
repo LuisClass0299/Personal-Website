@@ -1,0 +1,843 @@
+/* Terminal design: tokens, base, nav, footer, home. */
+
+/* tokens */
+:root {
+  --bg: #0d0d0d;             /* page ground */
+  --surface: #121212;        /* cards, terminal windows */
+  --surface-bar: #141414;    /* nav, footer, palette */
+  --surface-hover: #1a1a1a;  /* hovered tab */
+  --accent: #F5B800;         /* Scarab Gold */
+  --accent-hover: #ffd24a;
+  --accent-line: rgba(245, 184, 0, 0.3);
+  --text: #ffffff;
+  --text-muted: #999999;
+  --text-soft: #bbbbbb;
+  --border: #333333;
+  --border-strong: #444444;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --nav-height: 64px;
+  --gutter: 40px;
+}
+
+/* base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.t-accent {
+  color: var(--accent);
+}
+
+/* visually hidden, still read by screen readers */
+.t-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* outline icons drawn from the <symbol> sprite in the page */
+.t-icon {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* stage: nav + main; later slices layer the binary field behind both */
+.t-stage {
+  position: relative;
+  flex: 1 0 auto;
+  overflow: hidden;
+}
+
+/* nav */
+.t-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 24px;
+  min-height: var(--nav-height);
+  padding: 0 var(--gutter);
+  background: var(--surface-bar);
+  border-bottom: 1px solid var(--accent-line);
+  font-family: var(--font-mono);
+}
+
+.t-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--nav-height);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.t-brand:hover {
+  color: var(--text);
+}
+
+.t-brand svg {
+  flex: none;
+}
+
+.t-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: -1px; /* the current tab covers the nav's bottom border */
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 13px;
+  scrollbar-width: none;
+}
+
+.t-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.t-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-top-width: 2px;
+  border-radius: 8px 8px 0 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.t-tab:focus-visible {
+  outline-offset: -2px;
+}
+
+.t-tab:not([aria-current]):hover {
+  background-color: var(--surface-hover);
+  color: var(--text);
+}
+
+.t-tab[aria-current] {
+  border-color: var(--accent-line);
+  border-top-color: var(--accent);
+  border-bottom-color: var(--bg);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.t-jump {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-soft);
+  font-family: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.t-jump:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.t-jump kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  color: var(--accent);
+  font-family: inherit;
+}
+
+/* footer */
+.t-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 12px var(--gutter);
+  background: var(--surface-bar);
+  border-top: 1px solid var(--accent-line);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.t-footer p {
+  margin: 0;
+}
+
+.t-social {
+  display: flex;
+  gap: 4px;
+}
+
+.t-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.t-social a:hover {
+  background-color: var(--surface-hover);
+  color: var(--accent);
+}
+
+/* ⌘K palette */
+.t-palette {
+  width: min(560px, 100% - 32px);
+  max-width: none;
+  max-height: calc(100% - 136px);
+  margin: 120px auto auto;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid rgba(245, 184, 0, 0.35);
+  border-radius: 12px;
+  background: var(--surface-bar);
+  color: var(--text);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  font-family: var(--font-mono);
+}
+
+.t-palette::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .t-palette[open] {
+    animation: t-pop 0.22s ease-out;
+  }
+
+  .t-palette[open]::backdrop {
+    animation: t-fade 0.2s ease-out;
+  }
+}
+
+@keyframes t-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
+@keyframes t-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.t-palette-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.t-palette-prompt {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.t-palette-bar input {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  border: none;
+  outline: none; /* the caret marks focus, as on the board */
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+}
+
+.t-palette-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.t-palette-close:hover {
+  color: var(--text);
+}
+
+.t-palette-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+}
+
+.t-palette-list [role="option"] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.t-palette-list [role="option"][hidden] {
+  display: none;
+}
+
+.t-palette-list [aria-selected="true"] {
+  border-color: var(--accent);
+  background-color: rgba(245, 184, 0, 0.1);
+  color: var(--text);
+}
+
+.t-palette-list [role="option"] span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.t-palette-empty {
+  margin: 0;
+  padding: 4px 20px 20px;
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
+/* home: hero heading, terminal card, CTAs and photo frame */
+.home {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px var(--gutter) 96px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+}
+
+.home-intro {
+  flex: 1 1 460px;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.home-intro h1 {
+  margin: 0;
+  font-size: 64px;
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.home-intro h1 .t-accent {
+  font-family: var(--font-mono);
+}
+
+/* terminal card */
+.home-term {
+  border: 1px solid rgba(245, 184, 0, 0.22);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 15px;
+}
+
+.home-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: #171717;
+}
+
+.home-term-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.home-term-dot:nth-child(2) {
+  background: #febc2e;
+}
+
+.home-term-dot:nth-child(3) {
+  background: #28c840;
+}
+
+.home-term-title {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.home-term-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px 22px;
+  line-height: 1.6;
+}
+
+.home-term-body p {
+  margin: 0;
+}
+
+.home-term-path {
+  color: #888888;
+}
+
+.home-term-out {
+  color: var(--text-soft);
+}
+
+.home-caret {
+  display: inline-block;
+  width: 10px;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: -3px;
+  background: var(--accent);
+}
+
+/* CTAs */
+.home-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.home-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.home-cta-primary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.home-cta:hover {
+  background-color: var(--accent);
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+
+/* photo frame */
+.home-photo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-photo-frame {
+  position: relative;
+  width: 320px;
+  height: 420px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.home-photo-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.home-photo-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 0 solid var(--accent);
+}
+
+/* data-corner="tl|tr|bl|br": the first letter picks the edge, the second the side */
+.home-photo-corner[data-corner^="t"] {
+  top: 10px;
+  border-top-width: 2px;
+}
+
+.home-photo-corner[data-corner^="b"] {
+  bottom: 10px;
+  border-bottom-width: 2px;
+}
+
+.home-photo-corner[data-corner$="l"] {
+  left: 10px;
+  border-left-width: 2px;
+}
+
+.home-photo-corner[data-corner$="r"] {
+  right: 10px;
+  border-right-width: 2px;
+}
+
+.home-photo figcaption {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* home motion: name scramble, role typer, terminal lines and the binary field (home.js) */
+
+/* the scramble paints over the name, so its text and accessible name stay "Luis" */
+#home-name {
+  position: relative;
+  cursor: default;
+}
+
+#home-name[data-scramble] {
+  -webkit-text-fill-color: transparent;
+}
+
+#home-name[data-scramble]::after {
+  content: attr(data-scramble);
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* the typer shows its text from data-text; the whole role stays in #home-role for screen readers */
+.home-typed {
+  white-space: pre;
+}
+
+.home-typed::before {
+  content: attr(data-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-caret {
+    animation: home-blink 1s steps(1) infinite;
+  }
+
+  /* the terminal prints its lines one after another */
+  .home-term-body > p {
+    animation: home-line 0.35s ease-out 0.2s both;
+  }
+
+  .home-term-body > p:nth-child(2) { animation-delay: 0.55s; }
+  .home-term-body > p:nth-child(3) { animation-delay: 0.9s; }
+  .home-term-body > p:nth-child(4) { animation-delay: 1.25s; }
+  .home-term-body > p:nth-child(5) { animation-delay: 1.6s; }
+  .home-term-body > p:nth-child(6) { animation-delay: 1.95s; }
+
+  .t-stage {
+    cursor: crosshair;
+  }
+}
+
+@keyframes home-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes home-line {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* the binary field fills the stage under the nav and <main> and never takes a click */
+.home-field {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* photo decode: decode.js burns the photo into tiles on the canvas and plays /decode luis.
+   The img stays underneath as the base, so without JS the photo shows as is. */
+.home-decode-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* a sepia copy of the photo, sliced and shaken for .3s as the burn starts and as it sharpens */
+.home-decode-glitch {
+  position: absolute;
+  inset: 0;
+  background: url(assets/profile.jpeg) top / cover;
+  filter: sepia(1) saturate(6) brightness(1.1);
+  mix-blend-mode: screen;
+  clip-path: inset(50% 0 50% 0);
+  pointer-events: none;
+}
+
+.home-photo:is([data-decode="out"], [data-decode="sharp"]) .home-decode-glitch {
+  animation: home-decode-glitch 0.3s steps(1) forwards;
+}
+
+@keyframes home-decode-glitch {
+  0% { clip-path: inset(10% 0 70% 0); transform: translate(-7px, 0); }
+  15% { clip-path: inset(55% 0 20% 0); transform: translate(6px, 0); }
+  30% { clip-path: inset(30% 0 52% 0); transform: translate(-4px, 0); }
+  45% { clip-path: inset(78% 0 6% 0); transform: translate(7px, 0); }
+  60% { clip-path: inset(4% 0 86% 0); transform: translate(-6px, 0); }
+  75% { clip-path: inset(44% 0 36% 0); transform: translate(4px, 0); }
+  100% { clip-path: inset(50% 0 50% 0); transform: none; }
+}
+
+/* hold shows the real img; the other phases are drawn on the canvas */
+.home-photo[data-decode]:not([data-decode="hold"]) img {
+  visibility: hidden;
+}
+
+/* the /decode luis mini terminal: open for gap, in and sharp. Its resting styles are the end
+   state of each animation, so with animations off it still reads correctly. */
+.home-photo {
+  position: relative;
+}
+
+.home-decode-term {
+  display: none;
+  position: absolute;
+  left: -40px;
+  bottom: 76px;
+  z-index: 3;
+  width: 300px;
+  border: 1px solid rgba(245, 184, 0, 0.35);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  animation: home-decode-term-in 0.28s ease-out both;
+}
+
+.home-photo:is([data-decode="gap"], [data-decode="in"], [data-decode="sharp"]) .home-decode-term {
+  display: block;
+}
+
+.home-photo[data-decode="sharp"] .home-decode-term {
+  animation: home-decode-term-out 0.3s ease-in forwards;
+}
+
+.home-decode-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: #171717;
+}
+
+.home-decode-bar .home-term-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.home-decode-title {
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.home-decode-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px 14px;
+  line-height: 1.6;
+}
+
+.home-decode-body p {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.home-decode-cmd {
+  display: inline-block;
+  width: 12ch;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: home-decode-type 0.84s steps(12) 0.4s both;
+}
+
+.home-decode-caret {
+  display: none;
+  width: 10px;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: -3px;
+  background: var(--accent);
+  animation: home-blink 1s steps(1) infinite;
+}
+
+.home-photo[data-decode="gap"] .home-decode-caret {
+  display: inline-block;
+}
+
+.home-decode-out {
+  display: none;
+  animation: home-line 0.35s ease-out 0.1s both;
+}
+
+.home-decode-out:last-child {
+  color: var(--text-soft);
+  animation-delay: 1s;
+}
+
+.home-photo:is([data-decode="in"], [data-decode="sharp"]) .home-decode-out {
+  display: block;
+}
+
+.home-decode-ok {
+  color: #28c840;
+}
+
+/* decode.js pauses the loop while the tab is hidden or the photo is off-screen */
+.home-photo.is-paused * {
+  animation-play-state: paused;
+}
+
+@keyframes home-decode-term-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+}
+
+@keyframes home-decode-term-out {
+  to { opacity: 0; transform: translateY(10px) scale(0.96); }
+}
+
+@keyframes home-decode-type {
+  from { width: 0; }
+}
+
+/* phones */
+@media (max-width: 780px) {
+  :root {
+    --gutter: 16px;
+  }
+
+  /* logo and ⌘K share the top row, so the current tab still opens onto the page */
+  .t-tabs {
+    order: 1;
+    flex-basis: 100%;
+  }
+
+  .t-jump {
+    margin-left: auto;
+  }
+
+  .home {
+    padding-top: 40px;
+    gap: 48px;
+  }
+
+  .home-intro h1 {
+    font-size: 44px;
+  }
+
+  /* the board's -40px would hang off a phone screen, so the mini terminal sits inside the photo */
+  .home-decode-term {
+    left: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
