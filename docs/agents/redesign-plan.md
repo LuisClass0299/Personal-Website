@@ -76,7 +76,7 @@ The slices run as parallel background agents, one wave at a time. Each agent wor
 
 - [x] 0 Test harness
 - [x] 1 Foundations
-- [ ] 2 Home, static
+- [x] 2 Home, static
 - [ ] 3 Home, motion
 - [ ] 4 Photo decode
 - [ ] 5 ⌘K palette
