@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
 
+/* The static layout, without the motion scripts: the decode glitch shifts by up to 7px inside the clipped photo frame. */
+test.beforeEach(async ({ page }) => {
+  await page.route(/\/(home|decode)\.js$/, (route) => route.abort());
+});
+
 test.describe('home page hero (static)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');

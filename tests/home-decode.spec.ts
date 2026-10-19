@@ -1,5 +1,13 @@
 import { test, expect, type Page } from '@playwright/test';
 
+/* Fake-clock runs are slow in WebKit and Firefox once other workers share the machine. */
+test.describe.configure({ timeout: 90_000 });
+
+/* Only decode.js runs: the binary field's own loop would slow every fake-clock jump, most of all in WebKit. */
+test.beforeEach(async ({ page }) => {
+  await page.route('**/home.js', (route) => route.abort());
+});
+
 // The board's loop: hold 2600 → out 2600 → gap 1900 → in 2200 → sharp 450 → hold…
 const HOLD = 2600;
 const OUT = 2600;

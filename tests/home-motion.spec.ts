@@ -1,5 +1,13 @@
 import { test, expect, type Page } from '@playwright/test';
 
+/* Fake-clock runs are slow in WebKit and Firefox once other workers share the machine (the formations alone take ~14s). */
+test.describe.configure({ timeout: 90_000 });
+
+/* Only home.js runs: the photo decode's own loop would slow every fake-clock jump, most of all in WebKit. */
+test.beforeEach(async ({ page }) => {
+  await page.route('**/decode.js', (route) => route.abort());
+});
+
 const field = (page: Page) => page.locator('canvas.home-field');
 
 /* The field's backing store vs the stage's box in device pixels, read in one go so a reflow can't land between them. */
