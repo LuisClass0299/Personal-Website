@@ -33,12 +33,38 @@
 
         <main class="home">
             <div class="home-intro">
-                <h1>Hello, I'm <span class="t-accent">Luis</span></h1>
-                <p>I'm a computer science student interested in Web development and software engineering.</p>
-                <a href="pages/experience.html">See my previous experience</a>
+                <h1>Hello, I'm <span class="t-accent" id="home-name">Luis</span></h1>
+                <div class="home-term">
+                    <div class="home-term-bar">
+                        <span class="home-term-dot" aria-hidden="true"></span>
+                        <span class="home-term-dot" aria-hidden="true"></span>
+                        <span class="home-term-dot" aria-hidden="true"></span>
+                        <span class="home-term-title">luis@ucf: ~</span>
+                    </div>
+                    <div class="home-term-body">
+                        <p><span class="t-accent">luis@ucf</span><span class="home-term-path">:~$</span> whoami</p>
+                        <p class="home-term-out">Luis Classe — computer science student @ UCF</p>
+                        <p><span class="t-accent">luis@ucf</span><span class="home-term-path">:~$</span> cat focus.txt</p>
+                        <p class="home-term-out">web development · software engineering</p>
+                        <p><span class="t-accent">luis@ucf</span><span class="home-term-path">:~$</span> echo $ROLE</p>
+                        <p><span class="t-accent">→</span> <span id="home-role">web developer</span><span class="home-caret" aria-hidden="true"></span></p>
+                    </div>
+                </div>
+                <div class="home-ctas">
+                    <a class="home-cta home-cta-primary" href="pages/experience.html">./experience</a>
+                    <a class="home-cta" href="pages/projects.html">./projects</a>
+                    <a class="home-cta" href="assets/resume.pdf" target="_blank" rel="noopener">resume.pdf</a>
+                </div>
             </div>
             <figure class="home-photo">
-                <img src="assets/profile.jpeg" alt="Picture of Luis Classe">
+                <div class="home-photo-frame">
+                    <img src="assets/profile.jpeg" alt="Luis Classe standing in front of the city skyline at night" width="320" height="420">
+                    <span class="home-photo-corner" data-corner="tl" aria-hidden="true"></span>
+                    <span class="home-photo-corner" data-corner="tr" aria-hidden="true"></span>
+                    <span class="home-photo-corner" data-corner="bl" aria-hidden="true"></span>
+                    <span class="home-photo-corner" data-corner="br" aria-hidden="true"></span>
+                </div>
+                <figcaption><span>profile.jpeg</span><span class="t-accent">● online</span></figcaption>
             </figure>
         </main>
     </div>
