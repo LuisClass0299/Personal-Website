@@ -4,72 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luis' Portfolio</title>
-    <link rel = "icon" type = "image/png" href = "assets/favicon.png">
-    <link rel ="stylesheet" href = "style.css">
-    <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='-0.5%20-0.5%2016%2016'%20shape-rendering='crispEdges'%3E%3Cpath%20fill='%23F5B800'%20d='M2%200h1v1h-1zM12%200h1v1h-1zM2%201h1v1h-1zM5%201h1v1h-1zM7%201h1v1h-1zM9%201h1v1h-1zM12%201h1v1h-1zM3%202h1v1h-1zM5%202h5v1h-5zM11%202h1v1h-1zM4%203h7v1h-7zM3%204h9v1h-9zM3%205h9v1h-9zM4%206h7v1h-7zM1%207h1v1h-1zM4%207h3v1h-3zM8%207h3v1h-3zM13%207h1v1h-1zM2%208h5v1h-5zM8%208h5v1h-5zM2%209h5v1h-5zM8%209h5v1h-5zM1%2010h6v1h-6zM8%2010h6v1h-6zM2%2011h5v1h-5zM8%2011h5v1h-5zM2%2012h5v1h-5zM8%2012h5v1h-5zM1%2013h1v1h-1zM3%2013h4v1h-4zM8%2013h4v1h-4zM13%2013h1v1h-1zM0%2014h1v1h-1zM4%2014h3v1h-3zM8%2014h3v1h-3zM14%2014h1v1h-1z'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="terminal.css">
 </head>
 <body>
-    <nav class = "navbar"> 
-        <div class = "nav-logo">
-            <a href = "index.html"><img src = "assets/scarab_logo.png" alt = "logo"></a>
-            <span>Luis Classe</span>
-        </div> 
+    <svg style="display: none">
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+    </svg>
 
-        <ul class="nav-links">
-            <li><a href = "index.html" class ="active">Home</a></li>
-            <li><a href = "pages/experience.html">Experience</a></li>
-            <li><a href = "pages/projects.html">Projects</a></li>
-            <li><a href = "pages/about.html">About</a></li>
-        </ul>
-
-        <div class = "nav-icons">
-            <a href = "assets/resume.pdf" target="_blank" title = "Resume"><i class = "fa-solid fa-address-card"></i></a>
-            <a href = "https://www.linkedin.com/in/luis-classe" target="_blank" title = "Linkedin"><i class = "fa-brands fa-linkedin-in"></i></a>
-            <a href = "https://github.com/LuisClass0299" target="_blank" title = "GitHub"><i class = "fa-brands fa-github"></i></a>
-        </div>
-
-        <button class = "hamburger">☰</button>
-    </nav>
-
-    <div class = "mobile-menu">
-        <div class = "mobile-menu-top">
-            <div class = "nav-logo">
-                <img src = "assets/scarab_logo.png" alt = "logo">
-                <span>Luis Classe</span>
+    <div class="t-stage">
+        <nav class="t-nav" aria-label="Main">
+            <a class="t-brand" href="index.html">
+                <svg role="img" aria-label="Scarab logo" width="32" height="32" viewBox="-0.5 -0.5 16 16" shape-rendering="crispEdges"><path fill="#F5B800" d="M2 0h1v1h-1zM12 0h1v1h-1zM2 1h1v1h-1zM5 1h1v1h-1zM7 1h1v1h-1zM9 1h1v1h-1zM12 1h1v1h-1zM3 2h1v1h-1zM5 2h5v1h-5zM11 2h1v1h-1zM4 3h7v1h-7zM3 4h9v1h-9zM3 5h9v1h-9zM4 6h7v1h-7zM1 7h1v1h-1zM4 7h3v1h-3zM8 7h3v1h-3zM13 7h1v1h-1zM2 8h5v1h-5zM8 8h5v1h-5zM2 9h5v1h-5zM8 9h5v1h-5zM1 10h6v1h-6zM8 10h6v1h-6zM2 11h5v1h-5zM8 11h5v1h-5zM2 12h5v1h-5zM8 12h5v1h-5zM1 13h1v1h-1zM3 13h4v1h-4zM8 13h4v1h-4zM13 13h1v1h-1zM0 14h1v1h-1zM4 14h3v1h-3zM8 14h3v1h-3zM14 14h1v1h-1z"/></svg>
+                <span class="t-brand-name"><span class="t-accent">luis</span>@classe</span>
+            </a>
+            <div class="t-tabs">
+                <a class="t-tab" href="index.html" aria-current="page"><svg class="t-icon" aria-hidden="true" width="14" height="14"><use href="#i-file"/></svg>home.sh</a>
+                <a class="t-tab" href="pages/experience.html"><svg class="t-icon" aria-hidden="true" width="14" height="14"><use href="#i-file"/></svg>experience.log</a>
+                <a class="t-tab" href="pages/projects.html"><svg class="t-icon" aria-hidden="true" width="14" height="14"><use href="#i-file"/></svg>projects/</a>
+                <a class="t-tab" href="pages/about.html"><svg class="t-icon" aria-hidden="true" width="14" height="14"><use href="#i-file"/></svg>about.md</a>
             </div>
-            <button class = "close-btn">✕</button>
-        </div>
+            <button class="t-jump" type="button">Jump to <kbd>⌘K</kbd></button>
+        </nav>
 
-        <ul class = "mobile-links">
-            <li><a href = "index.html">Home</a></li>
-            <li><a href = "pages/experience.html">Experience</a></li>
-            <li><a href = "pages/projects.html">Projects</a></li>
-            <li><a href = "pages/about.html">About</a></li>
-        </ul>
-
-        <div class = "mobile-icons">
-            <a href ="assets/resume.pdf" target="_blank" title = Resume><i class = "fa-solid fa-address-card"></i></a>
-            <a href = "https://www.linkedin.com/in/luis-classe" target = "_blank" title = "Linkedin"><i class = "fa-brands fa-linkedin-in"></i></a>
-            <a href = "https://github.com/LuisClass0299" target="_blank" title = "Github"><i class = "fa-brands fa-github"></i></a>
-        </div>
+        <main class="home">
+            <div class="home-intro">
+                <h1>Hello, I'm <span class="t-accent">Luis</span></h1>
+                <p>I'm a computer science student interested in Web development and software engineering.</p>
+                <a href="pages/experience.html">See my previous experience</a>
+            </div>
+            <figure class="home-photo">
+                <img src="assets/profile.jpeg" alt="Picture of Luis Classe">
+            </figure>
+        </main>
     </div>
 
-    <section class = "hero" id = "home">
-        <div class = "hero-text">
-            <h1>Hello, I'm <span class = "accent">Luis</span></h1>
-            <p>I'm a computer science student interested in Web development and software engineering.</p>
-            <a href = "pages/experience.html" class="hero-btn">See my previous experience</a>
+    <footer class="t-footer">
+        <p>&copy; Luis Classe</p>
+        <div class="t-social">
+            <a href="assets/resume.pdf" target="_blank" rel="noopener" aria-label="Resume" title="Resume"><svg class="t-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><use href="#i-file"/><path d="M8 13h8M8 17h5"/></svg></a>
+            <a href="https://www.linkedin.com/in/luis-classe" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+            <a href="https://github.com/LuisClass0299" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57l-.02-2.04c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .32.21.69.82.57A12 12 0 0 0 12 .3"/></svg></a>
         </div>
-        <div class = "hero-image">
-                <img src="assets/profile.jpeg" alt="Picture of Luis Classe">
-                <img src="assets/UCF.png" alt="" class="sticker sticker-ucf">
-        </div>
-    </section>
-    <div class="footer-info">
-            <p>&copy Luis Classe</p>
-        </div>
-    
-    <script src = "script.js"></script>
+    </footer>
+
+    <script src="terminal.js" defer></script>
 </body>
 </html>
-

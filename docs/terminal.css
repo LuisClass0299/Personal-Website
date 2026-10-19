@@ -1,0 +1,325 @@
+/* Terminal design: tokens, base, nav, footer, home. */
+
+/* tokens */
+:root {
+  --bg: #0d0d0d;             /* page ground */
+  --surface: #121212;        /* cards, terminal windows */
+  --surface-bar: #141414;    /* nav, footer, palette */
+  --surface-hover: #1a1a1a;  /* hovered tab */
+  --accent: #F5B800;         /* Scarab Gold */
+  --accent-hover: #ffd24a;
+  --accent-line: rgba(245, 184, 0, 0.3);
+  --text: #ffffff;
+  --text-muted: #999999;
+  --text-soft: #bbbbbb;
+  --border: #333333;
+  --border-strong: #444444;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --nav-height: 64px;
+  --gutter: 40px;
+}
+
+/* base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.t-accent {
+  color: var(--accent);
+}
+
+/* outline icons drawn from the <symbol> sprite in the page */
+.t-icon {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* stage: nav + main; later slices layer the binary field behind both */
+.t-stage {
+  position: relative;
+  flex: 1 0 auto;
+  overflow: hidden;
+}
+
+/* nav */
+.t-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 24px;
+  min-height: var(--nav-height);
+  padding: 0 var(--gutter);
+  background: var(--surface-bar);
+  border-bottom: 1px solid var(--accent-line);
+  font-family: var(--font-mono);
+}
+
+.t-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--nav-height);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.t-brand:hover {
+  color: var(--text);
+}
+
+.t-brand svg {
+  flex: none;
+}
+
+.t-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: -1px; /* the current tab covers the nav's bottom border */
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 13px;
+  scrollbar-width: none;
+}
+
+.t-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.t-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-top-width: 2px;
+  border-radius: 8px 8px 0 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.t-tab:focus-visible {
+  outline-offset: -2px;
+}
+
+.t-tab:not([aria-current]):hover {
+  background-color: var(--surface-hover);
+  color: var(--text);
+}
+
+.t-tab[aria-current] {
+  border-color: var(--accent-line);
+  border-top-color: var(--accent);
+  border-bottom-color: var(--bg);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.t-jump {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-soft);
+  font-family: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.t-jump:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.t-jump kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  color: var(--accent);
+  font-family: inherit;
+}
+
+/* footer */
+.t-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 12px var(--gutter);
+  background: var(--surface-bar);
+  border-top: 1px solid var(--accent-line);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.t-footer p {
+  margin: 0;
+}
+
+.t-social {
+  display: flex;
+  gap: 4px;
+}
+
+.t-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.t-social a:hover {
+  background-color: var(--surface-hover);
+  color: var(--accent);
+}
+
+/* home (interim layout; slice 2 ports the hero, terminal card and photo frame) */
+.home {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px var(--gutter) 96px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+}
+
+.home-intro {
+  flex: 1 1 460px;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.home-intro h1 {
+  margin: 0;
+  font-size: 64px;
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.home-intro h1 .t-accent {
+  font-family: var(--font-mono);
+}
+
+.home-intro p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.home-intro a {
+  font-family: var(--font-mono);
+}
+
+.home-photo {
+  margin: 0;
+}
+
+.home-photo img {
+  display: block;
+  width: 320px;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 320 / 420;
+  border-radius: 6px;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* phones */
+@media (max-width: 780px) {
+  :root {
+    --gutter: 16px;
+  }
+
+  /* logo and ⌘K share the top row, so the current tab still opens onto the page */
+  .t-tabs {
+    order: 1;
+    flex-basis: 100%;
+  }
+
+  .t-jump {
+    margin-left: auto;
+  }
+
+  .home {
+    padding-top: 40px;
+    gap: 48px;
+  }
+
+  .home-intro h1 {
+    font-size: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
