@@ -1,0 +1,17 @@
+{
+  "disableClaudeAiConnectors": true,
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/stop-tests.mjs\"",
+            "timeout": 300,
+            "statusMessage": "Running Playwright tests..."
+          }
+        ]
+      }
+    ]
+  }
+}
