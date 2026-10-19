@@ -65,7 +65,7 @@ Each slice is done when: its Playwright tests pass, the page matches its board a
 
 ## Waves
 
-The slices run as parallel background agents, one wave at a time. Each agent works in its own git worktree and branch, runs `npm ci` there, and uses its own `PORT`. The orchestrator merges each branch into `dev` in slice order, runs the full suite and ticks the box below.
+The slices run as parallel background agents, one wave at a time. Each agent works in its own git worktree, runs `npm ci` there, and uses its own `PORT`. Worktrees are cut from `main`, so the agent's first step is `git checkout -b slice-N-name dev`. The orchestrator merges each branch into `dev` in slice order, runs the full suite and ticks the box below.
 
 1. Slice 1.
 2. Slices 2 and 5.
@@ -75,7 +75,7 @@ The slices run as parallel background agents, one wave at a time. Each agent wor
 ## Progress
 
 - [x] 0 Test harness
-- [ ] 1 Foundations
+- [x] 1 Foundations
 - [ ] 2 Home, static
 - [ ] 3 Home, motion
 - [ ] 4 Photo decode
