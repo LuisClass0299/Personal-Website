@@ -10,7 +10,7 @@ The old pages share `docs/style.css` and `docs/script.js`, so the home page move
 
 - `docs/terminal.css`: the terminal design's tokens, nav, footer and palette styles, plus the home styles. `index.html` loads this file and no longer loads `style.css`.
 - `docs/terminal.js`: the shared terminal code (nav and ⌘K palette), which the inner pages will load once they're redesigned.
-- `docs/home.js`: the home-only effects.
+- `docs/home.js`: the home-only effects (slice 3). The photo decode (slice 4) goes in `docs/decode.js`, so the two slices can run in parallel.
 
 Don't edit `style.css`, `script.js` or anything in `docs/pages/`. Links from the home nav and the palette go to the current inner pages.
 
