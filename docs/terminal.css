@@ -229,6 +229,139 @@ a:hover {
   color: var(--accent);
 }
 
+/* ⌘K palette */
+.t-palette {
+  width: min(560px, 100% - 32px);
+  max-width: none;
+  max-height: calc(100% - 136px);
+  margin: 120px auto auto;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid rgba(245, 184, 0, 0.35);
+  border-radius: 12px;
+  background: var(--surface-bar);
+  color: var(--text);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  font-family: var(--font-mono);
+}
+
+.t-palette::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .t-palette[open] {
+    animation: t-pop 0.22s ease-out;
+  }
+
+  .t-palette[open]::backdrop {
+    animation: t-fade 0.2s ease-out;
+  }
+}
+
+@keyframes t-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
+@keyframes t-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.t-palette-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.t-palette-prompt {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.t-palette-bar input {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  border: none;
+  outline: none; /* the caret marks focus, as on the board */
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+}
+
+.t-palette-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.t-palette-close:hover {
+  color: var(--text);
+}
+
+.t-palette-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+}
+
+.t-palette-list [role="option"] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.t-palette-list [role="option"][hidden] {
+  display: none;
+}
+
+.t-palette-list [aria-selected="true"] {
+  border-color: var(--accent);
+  background-color: rgba(245, 184, 0, 0.1);
+  color: var(--text);
+}
+
+.t-palette-list [role="option"] span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.t-palette-empty {
+  margin: 0;
+  padding: 4px 20px 20px;
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
 /* home (interim layout; slice 2 ports the hero, terminal card and photo frame) */
 .home {
   position: relative;
