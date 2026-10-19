@@ -58,6 +58,16 @@ a:hover {
   color: var(--accent);
 }
 
+/* visually hidden, still read by screen readers */
+.t-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* outline icons drawn from the <symbol> sprite in the page */
 .t-icon {
   flex: none;
@@ -585,15 +595,6 @@ a:hover {
 
 .home-typed::before {
   content: attr(data-text);
-}
-
-.home-sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: no-preference) {

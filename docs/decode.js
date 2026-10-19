@@ -10,8 +10,8 @@
 
   const W = 320, H = 420, TILE = 20, COLS = W / TILE, ROWS = H / TILE, ZOOM = 12;
   const PHASES = [['hold', 2600], ['out', 2600], ['gap', 1900], ['in', 2200], ['sharp', 450]];
-  // the digit a burning tile flashes, from its animation progress: [until, digit, colour]
-  const BITS = [[0.2], [0.3, '0', '#ffffff'], [0.4, '1', '#ffffff'], [0.5, '0', '#ffe9a8'], [0.6, '1', '#ffe9a8'], [0.7, '0', '#F5B800'], [0.8, '1', '#F5B800'], [1, '0', '#F5B800']];
+  // the digit a burning tile flashes, by tenth of its animation progress: [digit, colour], none before 0.2 or at 1
+  const BITS = [null, null, ['0', '#ffffff'], ['1', '#ffffff'], ['0', '#ffe9a8'], ['1', '#ffe9a8'], ['0', '#F5B800'], ['1', '#F5B800'], ['0', '#F5B800'], ['0', '#F5B800']];
   const jit = (i, salt) => { const x = Math.sin(i * 12.9898 + salt * 78.233) * 43758.5453; return x - Math.floor(x); };
   const ease = (t) => t * t * (3 - 2 * t);
   const clamp = (t) => Math.max(0, Math.min(1, t));
@@ -61,6 +61,20 @@
 
   let blank = false;
 
+  // Each tile's start delay, ms: out burns from the bottom-left, in runs it backwards from the top-right.
+  // They only change with the cycle's jitter, so they're computed once per cycle, not per frame.
+  const outDelay = new Float32Array(ROWS * COLS), inDelay = new Float32Array(ROWS * COLS);
+  let planned = -1;
+
+  function plan(cycle) {
+    for (let i = 0; i < ROWS * COLS; i++) {
+      const x = (i % COLS) * TILE, y = Math.floor(i / COLS) * TILE;
+      outDelay[i] = 300 + Math.hypot(x + 10, H - y - 10) / 530 * 1100 + jit(i, 20 + cycle) * 200;
+      inDelay[i] = Math.hypot(W - x - 10, y + 10) / 530 * 1100 + jit(i, 10 + cycle) * 250;
+    }
+    planned = cycle;
+  }
+
   function draw(phase, t, cycle) {
     // hold shows the img and gap shows nothing: clear once and idle until the tiles return
     const idle = phase === 'hold' || phase === 'gap';
@@ -71,13 +85,14 @@
     // the board's background-size transition: .36s steps(4) between sharp and 12× pixelated
     const step = Math.min(4, Math.floor(t / 90)) / 4;
     const zoom = phase === 'out' ? 1 + (ZOOM - 1) * step : phase === 'sharp' ? ZOOM - (ZOOM - 1) * step : ZOOM;
+    if (cycle !== planned) plan(cycle);
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
         const i = r * COLS + c, x = c * TILE, y = r * TILE;
-        // progress through the tile's .9s burn: out burns from the bottom-left, in runs it backwards from the top-right
+        // progress through the tile's .9s burn
         let f = 0;
-        if (phase === 'out') f = (t - 300 - Math.hypot(x + 10, H - y - 10) / 530 * 1100 - jit(i, 20 + cycle) * 200) / 900;
-        if (phase === 'in') f = 1 - (t - Math.hypot(W - x - 10, y + 10) / 530 * 1100 - jit(i, 10 + cycle) * 250) / 900;
+        if (phase === 'out') f = (t - outDelay[i]) / 900;
+        if (phase === 'in') f = 1 - (t - inDelay[i]) / 900;
         f = clamp(f);
         const opacity = f < 0.3 ? 1 : 1 - ease(clamp((f - 0.3) / 0.15));
         const burn = f < 0.3 ? ease(f / 0.3) : 1 - ease((f - 0.3) / 0.7);
@@ -85,11 +100,11 @@
           tile(base, x, y, zoom, opacity);
           if (burn > 0) tile(burnt, x, y, zoom, opacity * burn);
         }
-        const bit = BITS.find(([until]) => f < until);
-        if (bit && bit[1]) {
+        const bit = f < 1 && BITS[Math.floor(f * 10)];
+        if (bit) {
           ctx.globalAlpha = 1;
-          ctx.fillStyle = bit[2];
-          ctx.fillText(bit[1], x + TILE / 2, y + TILE / 2 + 1);
+          ctx.fillStyle = bit[1];
+          ctx.fillText(bit[0], x + TILE / 2, y + TILE / 2 + 1);
         }
       }
     }

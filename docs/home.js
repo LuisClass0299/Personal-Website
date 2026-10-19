@@ -42,14 +42,15 @@
   // takes to type it, so the first delete lands when it does on the board.
   const typer = { ri: 0, ci: ROLES[0].length, del: false, hold: ROLES[0].length, acc: 0 };
   let typed = null;
+  let shown = ROLES[0];
 
   // #home-role keeps the whole role for screen readers; an aria-hidden twin shows the typing (CSS ::before).
   function setUpTyper() {
     typed = document.createElement('span');
     typed.className = 'home-typed';
     typed.setAttribute('aria-hidden', 'true');
-    typed.dataset.text = ROLES[0];
-    role.classList.add('home-sr');
+    typed.dataset.text = shown;
+    role.classList.add('t-sr');
     role.after(typed);
   }
 
@@ -67,7 +68,8 @@
     typer.acc += dt;
     if (typer.acc < 70) return;
     for (; typer.acc >= 70; typer.acc -= 70) tickTyper();
-    typed.dataset.text = ROLES[typer.ri].slice(0, typer.ci);
+    const text = ROLES[typer.ri].slice(0, typer.ci);
+    if (text !== shown) typed.dataset.text = shown = text;
   }
 
   /* ---- binary field: a 24px grid of 0/1 on a canvas behind the stage ---- */
@@ -76,7 +78,7 @@
   const REACH = 130; // cursor radius for the gold tint and the extra churn, px
   const f = {
     w: 0, h: 0, dpr: 0, C: 0, R: 0, bits: [],
-    fm: null, wait: undefined, k: undefined, n: 0, ping: null,
+    fm: null, wait: 20, k: -1, n: 0, ping: null,
     mx: null, my: null, hover: false, glow: 0, acc: 0, dirty: true,
   };
   let tokens = null;
@@ -171,35 +173,29 @@
     const { C, R } = f;
     for (let k = 0; k < 10; k++) toggle(Math.floor(Math.random() * f.bits.length));
     if (live()) forNear((i) => { if (Math.random() < 0.3) toggle(i); });
-    let fm = f.fm;
+    const fm = f.fm;
     if (fm) {
       fm.t += 1;
       if (fm.kind === 'whale' && fm.t === 30) {
         const cx = Math.round(-8 + 0.75 * C * 0.7);
         sendPing(Math.min((C - 1) * S, (cx + 17) * S + HALF), (R - 1) * S);
       }
-      if (fm.t > dur(fm.kind)) {
-        fm = null;
+      if (fm.t > DUR[fm.kind]) {
+        f.fm = null;
         f.wait = 45;
+        delete canvas.dataset.formation;
       }
-    } else {
-      f.wait = (f.wait === undefined ? 20 : f.wait) - 1;
-      if (f.wait <= 0) fm = spawn(C, R);
+    } else if (--f.wait <= 0) {
+      f.fm = spawn(C, R);
+      canvas.dataset.formation = f.fm.kind;
     }
-    if (fm !== f.fm) {
-      if (fm) canvas.dataset.formation = fm.kind;
-      else delete canvas.dataset.formation;
-    }
-    f.fm = fm;
   }
 
-  function dur(kind) {
-    return kind === 'whale' ? 48 : 70;
-  }
+  const DUR = { eye: 70, clawd: 70, whale: 48 }; // ticks
 
   // Board spawn(), as-is: eye, Clawd and whale in turn.
   function spawn(C, R) {
-    f.k = ((f.k === undefined ? -1 : f.k) + 1) % 3;
+    f.k = (f.k + 1) % 3;
     const kind = ['eye', 'clawd', 'whale'][f.k];
     f.n += 1;
     if (kind === 'eye') return { kind, t: 0, n: f.n, ox: 2 + Math.floor(Math.random() * Math.max(1, C - 23)), oy: 4 + Math.floor(Math.random() * Math.max(1, R - 16)) };
@@ -211,7 +207,7 @@
   function shape(fm, C, R, mx, my) {
     const t = fm.t, out = [];
     const put = (r, c) => { if (r >= 0 && r < R && c >= 0 && c < C) out.push(r * C + c); };
-    const draw = (rows, oy, ox, skip) => rows.forEach((row, r) => {
+    const plot = (rows, oy, ox, skip) => rows.forEach((row, r) => {
       for (let c = 0; c < row.length; c++) if (row[c] === '#' && !(skip && skip(r, c))) put(oy + r, ox + c);
     });
     if (fm.kind === 'eye') {
@@ -221,7 +217,7 @@
         [3, 6, 9, 12, 15].forEach((c) => put(fm.oy + 5, fm.ox + c));
         return out;
       }
-      draw(lid === 'open'
+      plot(lid === 'open'
         ? ['       #####       ', '   ####     ####   ', ' ##             ## ', '#                 #', '#                 #', '#                 #', ' ##             ## ', '   ####     ####   ', '       #####       ']
         : ['', '', '  ###############  ', '#                 #', '#                 #', '#                 #', '  ###############  '], fm.oy, fm.ox);
       const ex = (fm.ox + 9) * 24 + 12, ey = (fm.oy + 4) * 24 + 12;
@@ -240,7 +236,7 @@
     if (fm.kind === 'clawd') {
       const blink = t === 30 || t === 31 || t === 44;
       const body = ['  ###########  ', '  ###########  ', '  ##  ###  ##  ', '  ##  ###  ##  ', '###############', '###############', '  ###########  ', '   # #   # #   ', '   # #   # #   '];
-      draw(body, fm.oy, fm.ox, (r, c) => r >= 4 && r <= 5 && c >= 13);
+      plot(body, fm.oy, fm.ox, (r, c) => r >= 4 && r <= 5 && c >= 13);
       if (blink) [[2, 4], [2, 5], [2, 9], [2, 10], [3, 4], [3, 5], [3, 9], [3, 10]].forEach((p) => put(fm.oy + p[0], fm.ox + p[1]));
       const waving = t >= 12 && t < 52;
       const arm = !waving ? [[4, 13], [4, 14], [5, 13], [5, 14]]
@@ -268,7 +264,7 @@
     const lit = new Set();
     const fm = f.fm;
     if (!fm) return lit;
-    const D = dur(fm.kind);
+    const D = DUR[fm.kind];
     for (const i of shape(fm, f.C, f.R, isLive ? f.mx : null, isLive ? f.my : null)) {
       if (fm.kind !== 'whale') {
         const g = jit(i, fm.n);
