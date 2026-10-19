@@ -42,7 +42,7 @@ Don't edit `style.css`, `script.js` or anything in `docs/pages/`. Links from the
 - The stack stays the same: no framework, no build step.
 - **Tokens:** define on `:root` in `terminal.css` the design's values: ground `#0d0d0d`, surfaces `#121212`/`#141414`/`#1a1a1a`, accent `#F5B800`, accent hover `#ffd24a`, muted text `#999`/`#bbb`, and `--font-mono` (IBM Plex Mono from Google Fonts).
 - **Binary field:** draw it on a `<canvas>`. The board renders about 2,000 DOM spans and re-renders them every 110ms, which only works on the canvas runtime. Port the formation logic (`shape()`, `spawn()`, `flip()`) as-is.
-- **Photo decode** (the pixel-burn loop with the `/decode luis` mini terminal): 336 tiles. Pick canvas or CSS tiles in slice 4, after measuring.
+- **Photo decode** (the pixel-burn loop with the `/decode luis` mini terminal): 336 tiles, drawn on one `<canvas>` over the real `<img>`. Slice 4 measured both options over one loop in headless Chromium. CSS tiles needed 1,698 DOM nodes, about twice the CPU of canvas, and had 72–82 frames over 20ms against 1–4 for canvas. Under 4× CPU throttling their worst frame was 383–483ms, against 50–100ms for canvas.
 - **⌘K palette:** a native `<dialog>`. Ctrl/⌘+K opens it, Esc closes it, and the input takes focus when it opens. It filters the same items as the board (Experience, Projects, About, Resume, GitHub, LinkedIn). For now it runs on the home page only.
 - **JS layout:** see "Scope" above. Each page loads only the scripts it uses.
 - **Reduced motion:** with `prefers-reduced-motion: reduce`, every animation stays still and all content is visible.
@@ -65,7 +65,7 @@ Each slice is done when: its Playwright tests pass, the page matches its board a
 
 ## Waves
 
-The slices run as parallel background agents, one wave at a time. Each agent works in its own git worktree, runs `npm ci` there, and uses its own `PORT`. Worktrees are cut from `main`, so the agent's first step is `git checkout -b slice-N-name dev`. The orchestrator merges each branch into `dev` in slice order, runs the full suite and ticks the box below.
+The slices run as parallel background agents, one wave at a time. Each agent works in its own git worktree, runs `npm ci` there, and uses its own `PORT`. Worktrees are cut from `main`, so the agent's first step is `git checkout -b slice-N-name dev`. A hook blocks `git reset --hard`, so the agent can't move the worktree's own branch; it stays empty and can be deleted after the merge. The agent runs the simplify review inline, not as four sub-agents, to save usage, and then re-runs the full suite, because simplify passes have broken things before. Commit messages say only what changed: no `Co-Authored-By` line and no mention of Claude. The orchestrator merges each branch into `dev` in slice order, runs the full suite and ticks the box below.
 
 1. Slice 1.
 2. Slices 2 and 5.
@@ -77,9 +77,48 @@ The slices run as parallel background agents, one wave at a time. Each agent wor
 - [x] 0 Test harness
 - [x] 1 Foundations
 - [x] 2 Home, static
-- [ ] 3 Home, motion
-- [ ] 4 Photo decode
+- [ ] 3 Home, motion (in progress on `slice-3-motion`, nothing committed yet)
+- [ ] 4 Photo decode (committed on `slice-4-decode` as `cd322b6`, waiting to merge after slice 3)
 - [x] 5 ⌘K palette
+
+## Merging wave 3
+
+- Slices 3 and 4 both edit `docs/index.html` (a script line each after `terminal.js`) and `docs/terminal.css` (a section each, plus rules in the 780px block). Keep both sides of each conflict.
+- Slice 4 adds `position: relative` to `.home-photo` and a `home-decode-blink` keyframe. If slice 3 adds its own blink for `.home-caret`, merge the two into one keyframe.
+
+## Lessons learned
+
+Read this before starting a slice. Add to it when a slice turns up something the next agent would otherwise have to rediscover.
+
+**Motion.** These are slice 4's rules, and slices 3, 6 and 7 follow them too:
+
+- An effect starts only once its inputs are ready (for example after `img.decode()`), and never under reduced motion.
+- It pauses while the tab is hidden (`visibilitychange`) and while it is off-screen (`IntersectionObserver`). Its clock advances only while it runs, so after a pause it resumes where it stopped.
+- A canvas stops drawing while nothing on it changes.
+- Prefix each slice's keyframes with its own name (`home-decode-*`) so parallel slices can't clash.
+- A layer added over content gets `aria-hidden`, and the content underneath keeps its alt text.
+- Resting styles equal each animation's end state, so the text stays readable if animations are switched off partway through.
+
+**Browser gotchas:**
+
+- The `hidden` attribute doesn't hide an `<svg>`. An SVG sprite needs `style="display: none"`, or it pushes the page down.
+- Safari doesn't focus a button when you click it. Code that returns focus to the trigger has to be told which button was clicked.
+- Safari's canvas has no `ctx.filter`. Compute filtered copies (for example the sepia burn) from the pixels once.
+
+**Tests:**
+
+- Drive timed effects with `page.clock`, and check each phase 50ms either side of its boundary.
+- `document.fonts.check` passes even when the font never loads. To check a font, look for a loaded face in `document.fonts`.
+- Cover a script failing to load: block it with `page.route(..., r => r.abort())`, and the page should still show its static content.
+
+**Inner pages** (slices 6–8):
+
+- Reuse slice 1's `.t-*` nav and footer classes and the `:root` tokens in `terminal.css`.
+- To adopt the ⌘K palette:
+  - keep a `<button class="t-jump" type="button">` in the page's nav;
+  - copy the `<dialog class="t-palette">` block from `index.html`, rewriting the relative hrefs for the page's depth (`experience.html`, `../assets/resume.pdf`, …);
+  - load `../terminal.css` and `<script src="../terminal.js" defer>`.
+- `terminal.js` reads the palette items from the markup and does nothing on a page without a `.t-palette`.
 - [ ] 6 Experience (on hold)
 - [ ] 7 Projects (on hold)
 - [ ] 8 About (on hold)
