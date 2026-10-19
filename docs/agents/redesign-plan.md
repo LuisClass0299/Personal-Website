@@ -77,14 +77,9 @@ The slices run as parallel background agents, one wave at a time. Each agent wor
 - [x] 0 Test harness
 - [x] 1 Foundations
 - [x] 2 Home, static
-- [ ] 3 Home, motion (in progress on `slice-3-motion`, nothing committed yet)
-- [ ] 4 Photo decode (committed on `slice-4-decode` as `cd322b6`, waiting to merge after slice 3)
+- [x] 3 Home, motion
+- [x] 4 Photo decode
 - [x] 5 ⌘K palette
-
-## Merging wave 3
-
-- Slices 3 and 4 both edit `docs/index.html` (a script line each after `terminal.js`) and `docs/terminal.css` (a section each, plus rules in the 780px block). Keep both sides of each conflict.
-- Slice 4 adds `position: relative` to `.home-photo` and a `home-decode-blink` keyframe. If slice 3 adds its own blink for `.home-caret`, merge the two into one keyframe.
 
 ## Lessons learned
 
@@ -104,10 +99,14 @@ Read this before starting a slice. Add to it when a slice turns up something the
 - The `hidden` attribute doesn't hide an `<svg>`. An SVG sprite needs `style="display: none"`, or it pushes the page down.
 - Safari doesn't focus a button when you click it. Code that returns focus to the trigger has to be told which button was clicked.
 - Safari's canvas has no `ctx.filter`. Compute filtered copies (for example the sepia burn) from the pixels once.
+- WebKit can run `defer` scripts before the stylesheets apply, so CSS custom properties read as `""` and layout is unstyled. Code that reads tokens or measures layout waits for `load`.
+- Shared keyframes (`home-blink`, `home-line`) live in slice 3's section. Reuse them instead of adding identical slice-prefixed copies.
 
 **Tests:**
 
 - Drive timed effects with `page.clock`, and check each phase 50ms either side of its boundary.
+- Under the fake clock every `requestAnimationFrame` costs about 6ms (Chromium) to 16ms (WebKit) whatever the page draws. For long stretches of fake time use `clock.fastForward`, which fires one frame per jump, not `runFor`.
+- Don't point click checks at an element another effect covers (the photo `img` sits under the decode canvas); target its container.
 - `document.fonts.check` passes even when the font never loads. To check a font, look for a loaded face in `document.fonts`.
 - Cover a script failing to load: block it with `page.route(..., r => r.abort())`, and the page should still show its static content.
 
